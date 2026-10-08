@@ -1,1 +1,775 @@
-Hello WElcome to project
+============================================================
+              DEVOPS 45 PROJECTS
+============================================================
+
+PROJECT #6
+
+DOCKER APPLICATION DEPLOYMENT ON AWS EC2
+
+LEVEL: BEGINNER → INTERMEDIATE
+
+============================================================
+1. PROJECT OBJECTIVE
+============================================================
+
+Deploy a web application inside a Docker container on
+AWS EC2.
+
+In this project we will learn:
+
+1. AWS EC2
+2. Ubuntu Linux
+3. Docker Installation
+4. Docker Image
+5. Docker Container
+6. Dockerfile
+7. Docker Port Mapping
+8. Docker Logs
+9. Docker Volume
+10. Docker Network
+11. Docker Restart Policy
+12. Docker Compose
+13. Git/GitHub
+
+
+============================================================
+2. PROJECT ARCHITECTURE
+============================================================
+
+                         INTERNET
+                             |
+                             | HTTP :80
+                             |
+                             v
+                    +----------------+
+                    |    AWS EC2     |
+                    |     Ubuntu     |
+                    |                |
+                    | Docker Engine  |
+                    |       |        |
+                    |       v        |
+                    | +------------+ |
+                    | |   Docker   | |
+                    | | Container  | |
+                    | |            | |
+                    | | Web App    | |
+                    | | Port 80    | |
+                    | +------------+ |
+                    +----------------+
+
+
+============================================================
+4. CREATE AWS EC2
+============================================================
+
+
+
+
+============================================================
+6. UPDATE SERVER
+============================================================
+
+sudo apt update
+
+sudo apt upgrade -y
+
+
+============================================================
+7. INSTALL BASIC TOOLS
+============================================================
+
+sudo apt install -y git curl wget vim tree
+
+
+============================================================
+8. INSTALL DOCKER
+============================================================
+
+sudo apt install -y docker.io
+
+sudo systemctl start docker
+
+sudo systemctl enable docker
+
+sudo systemctl status docker
+
+docker --version
+
+
+============================================================
+9. ADD UBUNTU USER TO DOCKER GROUP
+============================================================
+
+sudo usermod -aG docker ubuntu
+
+newgrp docker
+
+docker ps
+
+
+============================================================
+10. GIT CLONE DIRECTORY
+============================================================
+
+git clone
+
+============================================================
+13. BUILD DOCKER IMAGE
+============================================================
+
+docker build -t project6-app .
+
+
+Check images:
+
+docker images
+
+
+Expected:
+
+project6-app
+
+
+============================================================
+14. RUN DOCKER CONTAINER
+============================================================
+
+docker run -d 
+--name project6-container 
+-p 80:80 
+project6-app
+
+
+Check:
+
+docker ps
+
+
+Expected:
+
+CONTAINER
+project6-container
+
+
+============================================================
+15. ACCESS APPLICATION
+============================================================
+
+Open browser:
+
+http://<EC2-PUBLIC-IP>
+
+
+Expected:
+
+Welcome to HR 82 DevOps
+
+DevOps Project #6
+
+Docker Application Deployment on AWS EC2
+
+
+============================================================
+16. CHECK DOCKER CONTAINER
+============================================================
+
+docker ps
+
+
+Show all containers:
+
+docker ps -a
+
+
+Container logs:
+
+docker logs project6-container
+
+
+Follow logs:
+
+docker logs -f project6-container
+
+
+Container details:
+
+docker inspect project6-container
+
+
+============================================================
+17. STOP CONTAINER
+============================================================
+
+docker stop project6-container
+
+
+Check:
+
+docker ps
+
+
+Start again:
+
+docker start project6-container
+
+
+============================================================
+18. REMOVE CONTAINER
+============================================================
+
+docker stop project6-container
+
+docker rm project6-container
+
+
+Check:
+
+docker ps -a
+
+
+============================================================
+19. DOCKER RESTART POLICY
+============================================================
+
+Run container with restart policy:
+
+docker run -d --name project6-container --restart unless-stopped -p 80:80 project6-app
+
+
+Check:
+
+docker inspect project6-container
+
+
+Restart policy can help keep the application container
+running after Docker/host restart conditions.
+
+
+============================================================
+20. DOCKER VOLUME
+============================================================
+
+Create volume:
+
+docker volume create project6-data
+
+
+Check:
+
+docker volume ls
+
+
+Inspect:
+
+docker volume inspect project6-data
+
+
+Run container with volume:
+
+docker run -d 
+--name volume-test 
+-v project6-data:/data 
+nginx
+
+
+Check:
+
+docker ps
+
+
+Remove test container:
+
+docker rm -f volume-test
+
+
+============================================================
+21. DOCKER NETWORK
+============================================================
+
+Create network:
+
+docker network create project6-network
+
+
+Check:
+
+docker network ls
+
+
+Run container using network:
+
+docker run -d 
+--name project6-network-app 
+--network project6-network 
+-p 80:80 
+project6-app
+
+
+Check:
+
+docker ps
+
+
+============================================================
+22. DOCKER COMPOSE
+============================================================
+
+Create:
+
+nano docker-compose.yml
+
+
+Add:
+
+services:
+
+  web:
+    build: .
+    container_name: project6-web
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
+
+============================================================
+23. START USING DOCKER COMPOSE
+============================================================
+
+docker compose up -d
+
+
+Check:
+
+docker compose ps
+
+
+Check logs:
+
+docker compose logs
+
+
+Follow logs:
+
+docker compose logs -f
+
+
+Stop:
+
+docker compose down
+
+
+============================================================
+24. FAILURE TESTING
+============================================================
+
+Check container:
+
+docker ps
+
+
+Stop application:
+
+docker stop project6-web
+
+
+Website will stop working.
+
+
+Start again:
+
+docker start project6-web
+
+
+Check:
+
+docker ps
+
+
+Website should work again.
+
+
+============================================================
+25. USEFUL DOCKER COMMANDS
+============================================================
+
+docker --version
+
+docker ps
+
+docker ps -a
+
+docker images
+
+docker pull nginx
+
+docker build -t project6-app .
+
+docker run -d --name project6-app -p 80:80 project6-app
+
+docker stop project6-app
+
+docker start project6-app
+
+docker restart project6-app
+
+docker rm project6-app
+
+docker rmi project6-app
+
+docker logs project6-app
+
+docker logs -f project6-app
+
+docker inspect project6-app
+
+docker exec -it project6-app bash
+
+docker volume ls
+
+docker network ls
+
+docker system df
+
+docker system prune -f
+
+
+
+
+------------------------------------------------------------
+
+PROBLEM:
+
+Port 80 already in use
+
+
+CHECK:
+
+sudo ss -lntp | grep :80
+
+
+------------------------------------------------------------
+
+PROBLEM:
+
+Container stopped
+
+
+CHECK:
+
+docker ps -a
+
+
+CHECK LOGS:
+
+docker logs <container-name>
+
+
+------------------------------------------------------------
+
+PROBLEM:
+
+Website not opening
+
+
+CHECK:
+
+1. EC2 Security Group
+2. Port 80
+3. Docker container
+4. Docker port mapping
+5. EC2 public IP
+
+
+Check:
+
+docker ps
+
+
+Expected:
+
+0.0.0.0:80->80/tcp
+
+
+============================================================
+32. PROJECT FLOW
+============================================================
+
+AWS EC2
+   |
+   v
+Ubuntu
+   |
+   v
+Install Docker
+   |
+   v
+Create Dockerfile
+   |
+   v
+docker build
+   |
+   v
+Docker Image
+   |
+   v
+docker run
+   |
+   v
+Docker Container
+   |
+   v
+Port Mapping
+   |
+   v
+Internet
+   |
+   v
+Web Application
+
+
+============================================================
+33. WHAT YOU LEARNED
+============================================================
+
+1. AWS EC2
+2. Docker Installation
+3. Docker Image
+4. Docker Container
+5. Dockerfile
+6. Docker Build
+7. Docker Run
+8. Port Mapping
+9. Docker Logs
+10. Docker Volume
+11. Docker Network
+12. Restart Policy
+13. Docker Compose
+14. Container Troubleshooting
+15. Git/GitHub
+
+
+============================================================
+34. INTERVIEW QUESTIONS
+============================================================
+
+Q1. What is Docker?
+
+ANSWER:
+
+Docker is a containerization platform used to package and
+run applications with their dependencies.
+
+
+------------------------------------------------------------
+
+Q2. What is a Docker image?
+
+ANSWER:
+
+A Docker image is a read-only template used to create
+containers.
+
+
+------------------------------------------------------------
+
+Q3. What is a Docker container?
+
+ANSWER:
+
+A container is a running instance of a Docker image.
+
+
+------------------------------------------------------------
+
+Q4. What is Dockerfile?
+
+ANSWER:
+
+Dockerfile contains instructions used to build a Docker image.
+
+
+------------------------------------------------------------
+
+Q5. What does -p 80:80 mean?
+
+ANSWER:
+
+It maps port 80 of the EC2 host to port 80 of the
+Docker container.
+
+
+------------------------------------------------------------
+
+Q6. Why use Docker volumes?
+
+ANSWER:
+
+Volumes provide persistent storage outside the container
+lifecycle.
+
+
+------------------------------------------------------------
+
+Q7. What is Docker network?
+
+ANSWER:
+
+Docker network allows containers to communicate with
+each other.
+
+
+------------------------------------------------------------
+
+Q8. Why use Docker Compose?
+
+ANSWER:
+
+Docker Compose allows us to define and manage
+multi-container applications using YAML.
+
+
+------------------------------------------------------------
+
+Q9. Image vs Container?
+
+ANSWER:
+
+Image = Template
+
+Container = Running instance of the image
+
+
+------------------------------------------------------------
+
+Q10. How do you check Docker container logs?
+
+ANSWER:
+
+docker logs <container-name>
+
+
+============================================================
+35. INTERVIEW PROJECT EXPLANATION
+============================================================
+
+"I deployed a web application on AWS EC2 using Docker.
+
+I installed Docker on Ubuntu, created a Dockerfile,
+built a Docker image, and launched the application
+inside a Docker container.
+
+I configured port mapping to expose the application
+to the Internet.
+
+I also worked with Docker volumes, Docker networks,
+restart policies, Docker logs and Docker Compose.
+
+The source code was maintained using Git and GitHub."
+
+
+============================================================
+36. PROJECT 6 FINAL ARCHITECTURE
+============================================================
+
+                    INTERNET
+                       |
+                       |
+                    HTTP :80
+                       |
+                       v
+              +----------------+
+              |    AWS EC2     |
+              |    Ubuntu      |
+              |                |
+              | Docker Engine   |
+              |       |        |
+              |       v        |
+              | +------------+ |
+              | |   NGINX    | |
+              | | CONTAINER  | |
+              | |   :80      | |
+              | +------------+ |
+              +----------------+
+                       |
+                       v
+                WEB APPLICATION
+
+
+============================================================
+37. YOUTUBE TITLE
+============================================================
+
+DevOps 45 Projects #6 | Docker + AWS EC2 | Deploy Web App
+Using Docker | Hindi 2026
+
+
+============================================================
+38. THUMBNAIL TEXT
+============================================================
+
+DEVOPS 45 PROJECTS
+
+PROJECT #6
+
+DOCKER + AWS EC2
+
+BUILD → RUN → DEPLOY
+
+REAL DEVOPS PROJECT
+
+
+============================================================
+39. PROJECT PROGRESSION
+============================================================
+
+PROJECT #1
+Linux + Bash + AWS EC2
+        |
+        v
+PROJECT #2
+EC2 + Nginx + Tomcat
+        |
+        v
+PROJECT #3
+S3 + CloudFront + Route 53
+        |
+        v
+PROJECT #4
+VPC + Nginx + Private Tomcat
+        |
+        v
+PROJECT #5
+ALB + Multi-AZ + Private EC2
+        |
+        v
+PROJECT #6
+DOCKER + AWS EC2
+        |
+        v
+PROJECT #7
+JENKINS CI
+        |
+        v
+PROJECT #8
+DEVSECOPS CI PIPELINE
+        |
+        v
+PROJECT #9
+DOCKER + ECR AUTOMATED DEPLOYMENT
+        |
+        v
+PROJECT #10
+TERRAFORM AWS INFRASTRUCTURE
+
+
+============================================================
+              PROJECT #6 COMPLETED
+============================================================
+
+NEXT PROJECT:
+
+PROJECT #7
+
+JENKINS CONTINUOUS INTEGRATION
+
+GitHub → Jenkins → Build → Test → Docker
