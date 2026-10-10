@@ -1,15 +1,14 @@
 pipeline {
 agent any
 
-```
+
 stages {
 
-    stage('Checkout') {
-        steps {
-            checkout scm
+ stage('Checkout from Git') {
+            steps {
+                git branch: 'master', url: 'https://github.com/gsharma1298/yt_my_50_devops_projects.git'
+            }
         }
-    }
-
     stage('Compile') {
         steps {
             sh 'mvn clean compile'
@@ -50,3 +49,4 @@ post {
     }
 }
 
+}
