@@ -1,0 +1,52 @@
+pipeline {
+agent any
+
+```
+stages {
+
+    stage('Checkout') {
+        steps {
+            checkout scm
+        }
+    }
+
+    stage('Compile') {
+        steps {
+            sh 'mvn clean compile'
+        }
+    }
+
+    stage('Unit Tests') {
+        steps {
+            sh 'mvn test'
+        }
+    }
+
+    stage('Package') {
+        steps {
+            sh 'mvn package'
+        }
+    }
+
+    stage('Archive Artifact') {
+        steps {
+            archiveArtifacts artifacts: 'target/*.jar',
+                             fingerprint: true
+        }
+    }
+}
+
+post {
+    success {
+        echo 'CI Pipeline completed successfully'
+    }
+
+    failure {
+        echo 'CI Pipeline failed. Check Console Output.'
+    }
+
+    always {
+        echo 'CI Pipeline execution completed'
+    }
+}
+
