@@ -6,7 +6,7 @@ stages {
 
  stage('Checkout from Git') {
             steps {
-                git branch: 'master', url: 'https://github.com/gsharma1298/yt_my_50_devops_projects.git'
+                git branch: 'main', url: 'https://github.com/gsharma1298/yt_my_50_devops_projects.git'
             }
         }
     stage('Compile') {
