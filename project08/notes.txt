@@ -1,1 +1,219 @@
-Hello WElcome to project
+PROJECT 07 — JENKINS CONTINUOUS INTEGRATION
+COMPLETE SETUP FROM AWS EC2 TO GITHUB WEBHOOK
+
+==================================================
+PROJECT GOAL
+==================================================
+
+Automatically compile, test, package, and archive a Java application whenever code is pushed to GitHub.
+
+TECHNOLOGIES:
+AWS EC2, Ubuntu, Java 21, Jenkins, Git, GitHub, Maven, Jenkins Pipeline, GitHub Webhooks, Unit Testing.
+
+GITHUB REPOSITORY:
+https://github.com/gsharma1298/yt_my_50_devops_projects.git
+
+PROJECT DIRECTORY:
+project07
+
+==================================================
+STEP 1: CREATE AN AWS EC2 INSTANCE
+==================================================
+
+==================================================
+STEP 3: UPDATE UBUNTU PACKAGES
+==================================================
+
+
+sudo apt update
+sudo apt upgrade -y
+sudo apt install -y curl git maven wget gnupg ca-certificates fontconfig
+
+sudo apt install -y openjdk-21-jdk
+
+
+==================================================
+STEP 5: INSTALL JENKINS LTS
+==================================================
+
+
+sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key
+
+echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt update -y
+sudo apt install Jenkins -y
+
+
+==================================================
+STEP 10: INSTALL JENKINS PLUGINS
+==================================================
+
+Open:
+
+Manage Jenkins > Plugins > Available plugins
+
+Install or verify:
+
+1. Git plugin
+2. GitHub plugin
+3. Pipeline plugin
+4. Pipeline: Stage View
+5. JUnit plugin
+
+Restart Jenkins if requested.
+
+
+
+==================================================
+STEP 12: CHECK YOUR GITHUB PROJECT
+==================================================
+
+Repository:
+
+https://github.com/gsharma1298/yt_my_50_devops_projects.git
+
+Expected structure:
+
+yt_my_50_devops_projects/
+|
++-- project07/
+    |
+    +-- Jenkinsfile
+    +-- pom.xml
+    +-- README.md
+    +-- notes.txt
+    +-- src/
+        +-- main/
+            +-- java/
+                +-- Calculator.java
+
+
+==================================================
+STEP 13: CONFIGURE MAVEN PROJECT
+==================================================
+
+
+mvn clean package
+
+
+==================================================
+STEP 14: CREATE THE JENKINS PIPELINE JOB
+==================================================
+
+1. Open Jenkins.
+2. Click New Item.
+3. Enter:
+
+Project07-CI
+
+4. Select Pipeline.
+5. Click OK.
+
+Under Pipeline, configure:
+
+Definition:
+Pipeline script from SCM
+
+SCM:
+Git
+
+Repository URL:
+https://github.com/gsharma1298/yt_my_50_devops_projects.git
+
+Branch Specifier:
+*/main
+
+Script Path:
+project07/Jenkinsfile
+
+Save the job.
+
+For a private repository, configure an appropriate GitHub credential and select it in the SCM settings.
+
+==================================================
+STEP 16: RUN YOUR FIRST JENKINS BUILD
+==================================================
+
+1. Open Project07-CI.
+2. Click Build Now.
+3. Open the latest build.
+4. Click Console Output.
+
+
+
+==================================================
+STEP 18: ENABLE THE JENKINS WEBHOOK TRIGGER
+==================================================
+
+Jenkins > Project07-CI > Configure
+
+Under Build Triggers, select:
+
+GitHub hook trigger for GITScm polling
+
+Click Save.
+
+==================================================
+STEP 19: ADD A WEBHOOK IN GITHUB
+==================================================
+
+Open:
+
+https://github.com/gsharma1298/yt_my_50_devops_projects
+
+Navigate to:
+
+Settings > Webhooks > Add webhook
+
+Configure:
+
+Payload URL:
+https://YOUR_JENKINS_DOMAIN/github-webhook/
+
+Content type:
+application/json
+
+Events:
+Just the push event
+
+Active:
+Enabled
+
+
+==================================================
+STEP 22: FINAL PROJECT CHECKLIST
+==================================================
+
+[ ] EC2 instance created
+[ ] Ubuntu updated
+[ ] Java 21 installed
+[ ] Jenkins LTS installed
+[ ] Jenkins service running
+[ ] Jenkins administrator created
+[ ] Git installed
+[ ] Maven installed
+[ ] Build tools available to Jenkins
+[ ] Required Jenkins plugins installed
+[ ] Maven project builds successfully
+[ ] GitHub repository contains project07
+[ ] Jenkins Pipeline job created
+[ ] Script Path configured correctly
+[ ] First pipeline build succeeds
+[ ] JAR artifact archived
+[ ] Public HTTPS endpoint configured
+[ ] GitHub webhook configured
+[ ] Push event successfully triggers Jenkins
+[ ] Unit tests execute and pass
+
+PROJECT 07 COMPLETE!
+
+FINAL RESULT:
+
+Whenever code is pushed to the configured GitHub branch, Jenkins automatically checks out the latest source, compiles the Java application, runs unit tests, packages the JAR, and archives the artifact.
+
+NEXT PROJECT:
+PROJECT 08 — Jenkins CI with SonarQube Code Quality and Trivy Security Scanning.
