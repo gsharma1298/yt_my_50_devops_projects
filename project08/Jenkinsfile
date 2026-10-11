@@ -4,6 +4,8 @@ pipeline {
     environment {
         IMAGE_NAME = 'project08'
         SONAR_PROJECT_KEY = 'test'
+        SCANNER_HOME = tool 'sonar-scanner'
+
     }
 
     stages {
@@ -58,9 +60,13 @@ pipeline {
                             )
                         ]) {
                             sh '''
-                                mvn sonar:sonar \
-                                  -Dsonar.projectKey="${SONAR_PROJECT_KEY}" \
-                                  -Dsonar.token="${SONAR_TOKEN}"
+                                $SCANNER_HOME/bin/sonar-scanner \
+                          -Dsonar.projectKey=test \
+                          -Dsonar.projectName=test \
+                          -Dsonar.sources=. \
+                          -Dsonar.host.url=http://http://43.204.97.127:9000 \
+                          -Dsonar.token=$SONAR_TOKEN
+
                             '''
                         }
                     }
@@ -114,4 +120,3 @@ pipeline {
         }
     }
 }
-
