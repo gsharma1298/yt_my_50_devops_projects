@@ -49,30 +49,32 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                dir('project08') {
-                    withSonarQubeEnv('SonarQube') {
-                        withCredentials([
-                            string(
-                                credentialsId: 'sonar-token',
-                                variable: 'SONAR_TOKEN'
-                            )
-                        ]) {
-                            sh '''
-                                $SCANNER_HOME/bin/sonar-scanner \
+        
+stage('SonarQube Analysis') {
+    steps {
+        dir('project08') {
+            withSonarQubeEnv('SonarQube') {
+                withCredentials([
+                    string(
+                        credentialsId: 'sonar-token',
+                        variable: 'SONAR_TOKEN'
+                    )
+                ]) {
+                    sh '''
+                        $SCANNER_HOME/bin/sonar-scanner \
                           -Dsonar.projectKey=test \
                           -Dsonar.projectName=test \
-                          -Dsonar.sources=. \
-                          -Dsonar.host.url=http://http://43.204.97.127:9000 \
-                          -Dsonar.token=$SONAR_TOKEN
-
-                            '''
-                        }
-                    }
+                          -Dsonar.sources=src \
+                          -Dsonar.java.binaries=target/classes \
+                          -Dsonar.host.url=http://43.204.97.127:9000 \
+                          -Dsonar.token="$SONAR_TOKEN"
+                    '''
                 }
             }
         }
+    }
+}
+
 
         stage('Build Docker Image') {
             steps {
