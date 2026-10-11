@@ -9,6 +9,12 @@ stages {
                 git branch: 'main', url: 'https://github.com/gsharma1298/yt_my_50_devops_projects.git'
             }
         }
+    stage('Goto project07') {
+        steps {
+            sh 'cd project07'
+        }
+    }
+
     stage('Compile') {
         steps {
             sh 'mvn clean compile'
