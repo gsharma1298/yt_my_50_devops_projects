@@ -50,6 +50,7 @@ pipeline {
         }
 
         
+
 stage('SonarQube Analysis') {
     steps {
         dir('project08') {
@@ -66,7 +67,6 @@ stage('SonarQube Analysis') {
                           -Dsonar.projectName=test \
                           -Dsonar.sources=src \
                           -Dsonar.java.binaries=target/classes \
-                          -Dsonar.host.url=http://43.204.97.127:9000 \
                           -Dsonar.token="$SONAR_TOKEN"
                     '''
                 }
