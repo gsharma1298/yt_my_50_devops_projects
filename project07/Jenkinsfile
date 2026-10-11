@@ -7,7 +7,7 @@ pipeline {
         stage('Checkout from Git') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/gsharma1298/yt_my_50_devops_projects.gt'
+                    url: 'https://github.com/gsharma1298/yt_my_50_devops_projects.git'
             }
         }
 
