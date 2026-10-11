@@ -1,58 +1,61 @@
+
 pipeline {
-agent any
+    agent any
 
+    stages {
 
-stages {
-
- stage('Checkout from Git') {
+        stage('Checkout from Git') {
             steps {
-                git branch: 'main', url: 'https://github.com/gsharma1298/yt_my_50_devops_projects.git'
+                git branch: 'main',
+                    url: 'https://github.com/gsharma1298/yt_my_50_devops_projects.git'
             }
         }
-    stage('Goto project07') {
-        steps {
-            sh 'cd project07'
+
+
+
+        stage('Compile') {
+            steps {
+                dir('project07') {
+                    sh 'mvn clean compile'
+                }
+            }
+        }
+
+        stage('Unit Tests') {
+            steps {
+                dir('project07') {
+                    sh 'mvn test'
+                }
+            }
+        }
+
+        stage('Package') {
+            steps {
+                dir('project07') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage('Archive Artifact') {
+            steps {
+                archiveArtifacts artifacts: 'project07/target/*.jar',
+                                 fingerprint: true
+            }
         }
     }
 
-    stage('Compile') {
-        steps {
-            sh 'mvn clean compile'
+    post {
+        success {
+            echo 'CI Pipeline completed successfully'
+        }
+
+        failure {
+            echo 'CI Pipeline failed. Check Console Output.'
+        }
+
+        always {
+            echo 'CI Pipeline execution completed'
         }
     }
-
-    stage('Unit Tests') {
-        steps {
-            sh 'mvn test'
-        }
-    }
-
-    stage('Package') {
-        steps {
-            sh 'mvn package'
-        }
-    }
-
-    stage('Archive Artifact') {
-        steps {
-            archiveArtifacts artifacts: 'target/*.jar',
-                             fingerprint: true
-        }
-    }
-}
-
-post {
-    success {
-        echo 'CI Pipeline completed successfully'
-    }
-
-    failure {
-        echo 'CI Pipeline failed. Check Console Output.'
-    }
-
-    always {
-        echo 'CI Pipeline execution completed'
-    }
-}
-
 }
