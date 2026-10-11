@@ -217,3 +217,5 @@ Whenever code is pushed to the configured GitHub branch, Jenkins automatically c
 
 NEXT PROJECT:
 PROJECT 08 — Jenkins CI with SonarQube Code Quality and Trivy Security Scanning.
+
+check webhhooks
