@@ -27,7 +27,7 @@ STEP 3: UPDATE UBUNTU PACKAGES
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y curl git maven wget gnupg ca-certificates fontconfig
+sudo apt install -y curl git maven wget gnupg ca-certificates fontconfig xauth x11-apps
 
 sudo apt install -y openjdk-21-jdk
 
