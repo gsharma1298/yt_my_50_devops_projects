@@ -6,6 +6,6 @@ COPY src/Main.java .
 
 RUN javac Main.java
 
-EXPOSE 8080
+EXPOSE 8081
 
 CMD ["java", "Main"]
