@@ -1,0 +1,85 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/gsharma1298/yt_my_50_devops_projects.git'
+
+                dir('project08') {
+                    sh 'ls -la'
+                }
+            }
+        }
+
+        stage('Compile Java') {
+            steps {
+                dir('project08') {
+                    sh '''
+                        mkdir -p build/classes
+                        javac -d build/classes src/Main.java
+                    '''
+                }
+            }
+        }
+
+        stage('Trivy Filesystem Scan') {
+            steps {
+                dir('project08') {
+                    sh 'trivy fs --scanners vuln,misconfig,secret .'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                dir('project08') {
+                                         sh '''
+                            sonar-scanner \
+                        -Dsonar.projectKey=test \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://65.0.184.188:9000 \
+                        -Dsonar.login=sqp_dca420c56d9fad06830a6ca45528c511b010db52
+                        '''
+                }
+            }
+        }
+
+        
+
+        stage('Build Docker Image') {
+    steps {
+        dir('project08') {
+            sh 'docker build -t project8:${BUILD_NUMBER} .'
+        }
+    }
+}
+
+        stage('Trivy Docker Image Scan') {
+            steps {
+                sh '''
+                    trivy image \
+                      --severity HIGH,CRITICAL \
+                      --exit-code 1 \
+                      project8:${BUILD_NUMBER}
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Project 08 DevSecOps Pipeline SUCCESS!'
+        }
+
+        failure {
+            echo 'Project 08 DevSecOps Pipeline FAILED!'
+            echo 'Check Jenkins Console Output.'
+        }
+
+        always {
+            echo 'Project 08 pipeline execution completed.'
+        }
+    }
+}
