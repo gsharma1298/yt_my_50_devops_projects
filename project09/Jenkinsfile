@@ -1,0 +1,65 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/gsharma1298/yt_my_50_devops_projects.git'
+
+                dir('project08') {
+                    sh 'ls -la'
+                }
+            }
+        }
+
+        
+        stage('Trivy Filesystem Scan') {
+            steps {
+                dir('project08') {
+                    sh 'trivy fs --scanners vuln,misconfig,secret .'
+                }
+            }
+        }
+
+       
+        stage('Build Docker Image') {
+    steps {
+        dir('project08') {
+            sh 'docker build -t project9:${BUILD_NUMBER} .'
+        }
+    }
+}
+
+       
+        stage('push to ecr') {
+       steps {
+        
+            sh '''
+            aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 253291597598.dkr.ecr.ap-south-1.amazonaws.com
+            docker tag project9:${BUILD_NUMBER} 253291597598.dkr.ecr.ap-south-1.amazonaws.com/ecr:${BUILD_NUMBER}
+            docker push 253291597598.dkr.ecr.ap-south-1.amazonaws.com/ecr:${BUILD_NUMBER}
+            '''
+            }
+        }
+
+}
+
+
+
+
+    post {
+        success {
+            echo 'Project 08 DevSecOps Pipeline SUCCESS!'
+        }
+
+        failure {
+            echo 'Project 08 DevSecOps Pipeline FAILED!'
+            echo 'Check Jenkins Console Output.'
+        }
+
+        always {
+            echo 'Project 08 pipeline execution completed.'
+        }
+    }
+}
