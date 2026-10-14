@@ -24,8 +24,9 @@ systemctl start docker
 docker --version
 aws --version
 
-docker rm -f nginx 2>/dev/null || true
 
 docker run -d --name project9 --restart unless-stopped -p 8081:8081 253291597598.dkr.ecr.ap-south-1.amazonaws.com/ecr:18
+
+
 echo "Docker, AWS CLI, and Nginx setup completed"
 
