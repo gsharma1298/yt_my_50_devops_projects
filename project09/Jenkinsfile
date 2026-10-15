@@ -59,7 +59,7 @@ pipeline {
                             echo $BUILD_NUMBER
 
                             # push this image to your git hub
-                            sed -i -E "s#(amazonaws\.com/ecr:)[^[:space:]\"']+#\1${BUILD_NUMBER}#" userdata.sh
+                            sed -i "s#amazonaws.com/ecr:.*#amazonaws.com/ecr:${BUILD_NUMBER}#" userdata.sh
                             git add .
                             git commit -m "Image to version \${BUILD_NUMBER}"
                             git push https://${git_token}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
