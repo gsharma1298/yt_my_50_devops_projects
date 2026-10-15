@@ -60,7 +60,7 @@ pipeline {
 
                             # push this image to your git hub
                             sed -i "s/:IMAGE_TAG/:${BUILD_NUMBER}/g" userdata.sh
-                            git add userdata.sh
+                            git add .
                             git commit -m "Image to version \${BUILD_NUMBER}"
                             git push https://${git_token}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                         '''
