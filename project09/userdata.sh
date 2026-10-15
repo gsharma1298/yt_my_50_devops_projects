@@ -24,6 +24,7 @@ systemctl start docker
 docker --version
 aws --version
 
+docker pull 253291597598.dkr.ecr.ap-south-1.amazonaws.com/ecr:17
 
 docker run -d --name project9 --restart unless-stopped -p 8081:8081 253291597598.dkr.ecr.ap-south-1.amazonaws.com/ecr:17
 
