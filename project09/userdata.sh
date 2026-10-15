@@ -25,7 +25,7 @@ docker --version
 aws --version
 
 
-docker run -d --name project9 --restart unless-stopped -p 8081:8081 253291597598.dkr.ecr.ap-south-1.amazonaws.com/ecr:18
+docker run -d --name project9 --restart unless-stopped -p 8081:8081 253291597598.dkr.ecr.ap-south-1.amazonaws.com/ecr:IMAGE_TAG
 
 
 echo "Docker, AWS CLI, and Nginx setup completed"
