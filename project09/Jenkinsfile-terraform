@@ -1,18 +1,6 @@
 pipeline {
     agent any
 
-    options {
-        disableConcurrentBuilds()
-    }
-
-    parameters {
-        choice(
-            name: 'ACTION',
-            choices: ['apply', 'destroy'],
-            description: 'Choose Terraform action'
-        )
-    }
-
     stages {
         stage('Git Checkout') {
             steps {
@@ -21,70 +9,13 @@ pipeline {
             }
         }
 
-        stage('Terraform Init') {
-            steps {
+                steps {
                 dir('project09') {
-                    sh 'terraform init'
+                    sh '''
+                    terraform init 
+                    terraform apply --auto-approve
+                    '''
+                }
                 }
             }
         }
-
-        stage('Terraform Validate') {
-            when {
-                expression { params.ACTION == 'apply' }
-            }
-            steps {
-                dir('project09') {
-                    sh 'terraform validate'
-                }
-            }
-        }
-
-        stage('Terraform Plan') {
-            when {
-                expression { params.ACTION == 'apply' }
-            }
-            steps {
-                dir('project09') {
-                    sh 'terraform plan -out=tfplan'
-                }
-            }
-        }
-
-        stage('Terraform Apply') {
-            when {
-                expression { params.ACTION == 'apply' }
-            }
-            steps {
-                dir('project09') {
-                    sh 'terraform apply -auto-approve tfplan'
-                }
-            }
-        }
-
-        stage('Terraform Destroy') {
-            when {
-                expression { params.ACTION == 'destroy' }
-            }
-            steps {
-                dir('project09') {
-                    sh 'terraform destroy -auto-approve'
-                }
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "Terraform ${params.ACTION} completed successfully!"
-        }
-
-        failure {
-            echo 'Terraform pipeline failed. Check the Jenkins console output.'
-        }
-
-        always {
-            echo 'Project 09 Terraform pipeline execution completed.'
-        }
-    }
-}
