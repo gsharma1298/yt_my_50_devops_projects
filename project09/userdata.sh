@@ -25,7 +25,7 @@ docker --version
 aws --version
 
 
-docker run -d name nginx -p 80:80 nginx
+docker run -d --name nginx -p 80:80 nginx
 
 docker pull 253291597598.dkr.ecr.ap-south-1.amazonaws.com/ecr:3
 
