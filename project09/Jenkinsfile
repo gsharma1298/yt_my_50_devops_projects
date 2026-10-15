@@ -59,7 +59,7 @@ pipeline {
                             echo $BUILD_NUMBER
 
                             # push this image to your git hub
-                            sed -i "s/253291597598.dkr.ecr.ap-south-1.amazonaws.com/ecr:*/253291597598.dkr.ecr.ap-south-1.amazonaws.com/ecr:${BUILD_NUMBER}/g" userdata.sh
+                            sed -i "s/docker run -d --name project9 --restart unless-stopped -p 8081:8081 253291597598.dkr.ecr.ap-south-1.amazonaws.com/ecr:*/docker run -d --name project9 --restart unless-stopped -p 8081:8081 253291597598.dkr.ecr.ap-south-1.amazonaws.com/ecr:${BUILD_NUMBER}/g" userdata.sh
                             git add .
                             git commit -m "Image to version \${BUILD_NUMBER}"
                             git push https://${git_token}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
