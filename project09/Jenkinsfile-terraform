@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -9,13 +10,15 @@ pipeline {
             }
         }
 
-                steps {
+        stage('Terraform Init and Apply') {
+            steps {
                 dir('project09') {
                     sh '''
-                    terraform init 
-                    terraform apply --auto-approve
+                       terraform init
+                        terraform apply -auto-approve
                     '''
-                }
                 }
             }
         }
+    }
+}
